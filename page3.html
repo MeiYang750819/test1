@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>💼 勇者入職試煉</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="nav.css">
+    <script src="game-engine.js"></script>
+    <style>
+        /* 針對第三分頁專屬的極致緊湊排版微調 */
+        .details-body {
+            text-align: left;
+            line-height: 1.1; 
+            padding-top: 4px; /* 頂部間距極限壓縮 */
+            padding-bottom: 8px; /* 底部間距極限壓縮 */
+        }
+        .task-target {
+            color: #efefef;
+            font-weight: bold;
+            display: block;
+            margin-bottom: 6px; /* 與下方選項的距離縮到最小 */
+        }
+        /* 選項與打勾框的精準緊密對齊 */
+        .check-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3px; /* 極致縮小每個打勾選項的間距 */
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .check-item input[type="checkbox"] {
+            margin-right: 6px; 
+            width: 15px;
+            height: 15px;
+            flex-shrink: 0; 
+        }
+        .check-input-text {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #8ab4f8;
+            color: #fff;
+            width: 150px;
+            margin-left: 5px;
+            outline: none;
+            font-family: inherit;
+        }
+        .action-center {
+            text-align: center;
+            margin-top: 8px; /* 按鈕與文字間距壓縮 */
+        }
+        /* 科技風按鈕：暗色底 + 螢光綠框 */
+        .btn-confirm {
+            width: 100%;
+            padding: 10px; 
+            background: #2d3748;
+            color: #4ade80;
+            font-weight: bold;
+            font-size: 15px;
+            border: 1px solid #4ade80;
+            border-radius: 6px;
+            cursor: pointer;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+        .btn-confirm:hover {
+            background: #4ade80;
+            color: #000;
+        }
+    </style>
+</head>
+<body class="page-3">
+
+    <div class="sticky-bar" id="block-identity">
+        <span class="dyn-company">載入中...</span>　｜　<span class="dyn-team">載入中...</span>　｜　<span class="dyn-type">載入中...</span>　｜　<span class="dyn-name">載入中...</span>
+    </div>
+
+    <div class="sticky-bar" id="block-status-1" style="top: 45px;">
+        <span id="rank-text">載入中...</span>
+    </div>
+
+    <div class="sticky-bar" id="block-status-2" style="top: 90px;">
+        <span id="status-tag">載入中...</span>
+    </div>
+
+    <div class="sticky-bar" id="block-status-3" style="top: 135px;">
+        <span id="score-label" style="color:#ff8a8a;">🏆 冒險積分：</span><span id="score-text">0分</span>
+        <div class="progress-track"><div class="progress-fill" id="score-fill" style="width: 0%;"></div></div>
+        　｜　<span id="prog-label" style="color:#ff8a8a;">⚔️ 攻略進度：</span><span id="prog-val">0%</span>
+        <div class="progress-track"><div class="progress-fill" id="prog-fill" style="width: 0%;"></div></div>
+    </div>
+
+    <nav class="nav-tabs" style="top: 180px;">
+        <a href="index.html" class="tab-btn">📜 冒險指南</a>
+        <a href="page2.html" class="tab-btn">🏹 鍛造秘笈</a>
+        <a href="page3.html" class="tab-btn active">⚔️ 勇者試煉</a>
+    </nav>
+
+    <main class="tab-content active">
+        
+        <details>
+            <summary class="main-summary">【新手報到】啟程點</summary>
+            <div class="details-body">
+                <span class="task-target">📣 任務目標 -確認已詳閱入職規範.</span>
+                
+                <label class="check-item"><input type="checkbox" id="chk-guide"> 我已閱讀「📜 冒險指南」</label>
+                <label class="check-item"><input type="checkbox" id="chk-forge"> 我已閱讀「🏹 鍛造秘笈」</label>
+                <label class="check-item"><input type="checkbox" id="chk-risk"> 若被退件「 👤 本人承擔」</label>
+                
+                <div class="action-center">
+                    <button class="btn-confirm" onclick="checkAndCompleteTrial1(event)">✓ 確認完成新手報到</button>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary class="main-summary">【裝備盤點】行囊區</summary>
+            <div class="details-body">
+                <span class="task-target">📣 任務目標 -是否有以下四大文件,若無按確認即可.</span>
+                
+                <label class="check-item"><input type="checkbox"> 台新國際商業銀行-實體存摺</label>
+                <label class="check-item"><input type="checkbox"> 中餐證照</label>
+                <label class="check-item"><input type="checkbox"> 西餐證照</label>
+                <label class="check-item"><input type="checkbox"> 其他：<input type="text" class="check-input-text"></label>
+                
+                <div class="action-center">
+                    <button class="btn-confirm" onclick="GameEngine.completeTrial(event, 2)">✓ 確認完成裝備盤點</button>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary class="main-summary">【裝備強化】準備期</summary>
+            <div class="details-body">
+                <span class="task-target">📣 任務目標 -請上傳您的五大必備文件，進入裝備鑑定所。</span>
+                <span style="font-size: 13px; color: #b7b7b7;">(此區未來將連動後台審核機制)</span>
+                
+                <div class="action-center">
+                    <button class="btn-confirm" onclick="GameEngine.completeTrial(event, 3)">✓ 確認完成裝備強化</button>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary class="main-summary">【戰前整備】複習期</summary>
+            <div class="details-body">
+                <span class="task-target">📣 任務目標 -再次確認實體報到時間與地點，準備出征！</span>
+                
+                <div class="action-center">
+                    <button class="btn-confirm" onclick="GameEngine.completeTrial(event, 4)">✓ 確認完成戰前整備</button>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary class="main-summary">【最終考驗】報到日</summary>
+            <div class="details-body">
+                <span class="task-target">📣 任務目標 -報到當日，線上簽署正式僱傭契約。</span>
+                
+                <div class="action-center">
+                    <button class="btn-confirm" onclick="GameEngine.completeTrial(event, 5)">✓ 確認完成最終考驗</button>
+                </div>
+            </div>
+        </details>
+
+        <details>
+            <summary class="main-summary">【完成試煉】決斷區</summary>
+            <div class="details-body">
+                <span class="task-target">📣 任務目標 -主管與人資最終決斷放行，踏入榮耀殿堂！</span>
+                
+                <div class="action-center">
+                    <button class="btn-confirm" style="color:#fbbf24; border-color:#fbbf24;" onclick="GameEngine.completeTrial(event, 6)">👑 迎接最終榮耀 (完成試煉)</button>
+                </div>
+            </div>
+        </details>
+
+    </main>
+
+    <footer class="footer">
+        <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
+        © Copyright 2026 MYs System-b1.0.0-02-22-2026-115
+    </footer>
+
+    <script>
+        const fetchedData = { companyName: "FIZZ FIZZ.TAIPEI", team: "外場團隊", type: "兼職", userName: "測試員" };
+        function applyData(data) {
+            document.querySelectorAll('.dyn-company').forEach(el => el.innerText = data.companyName);
+            document.querySelectorAll('.dyn-team').forEach(el => el.innerText = data.team);
+            document.querySelectorAll('.dyn-type').forEach(el => el.innerText = data.type);
+            document.querySelectorAll('.dyn-name').forEach(el => el.innerText = data.userName);
+        }
+        window.addEventListener('load', () => applyData(fetchedData));
+
+        // 第一關專屬打勾防呆檢查
+        function checkAndCompleteTrial1(event) {
+            const chk1 = document.getElementById('chk-guide').checked;
+            const chk2 = document.getElementById('chk-forge').checked;
+            const chk3 = document.getElementById('chk-risk').checked;
+
+            if (!chk1 || !chk2 || !chk3) {
+                alert("⚠️ 勇者請注意：必須勾選所有確認項目，才能推進！");
+                return;
+            }
+            // 都有打勾才呼叫引擎通關
+            GameEngine.completeTrial(event, 1);
+        }
+    </script>
+</body>
+</html>
