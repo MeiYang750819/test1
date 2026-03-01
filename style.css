@@ -179,7 +179,7 @@ details[open] > details {
   padding: 15px; 
   font-size: var(--font-size-text); 
   color: var(--details-textColor); 
-  white-space: pre-wrap; /* 嚴格保留 HTML 內的換行與空格設定 */
+  white-space: pre-wrap; /* 🎯 關鍵修復：嚴格保留 HTML 內的換行與空格設定，讓第一頁復活！ */
 }
 
 /* 區分大標與小標的外觀 */
