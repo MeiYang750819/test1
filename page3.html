@@ -125,22 +125,16 @@
             color: #666;
         }
 
-        /* 申請更改日期按鈕樣式 */
-        .btn-change {
-            background: transparent;
-            color: #ff8a8a;
-            border: 1px solid #ff8a8a;
-            padding: 5px 10px;
-            border-radius: 4px;
+        /* 申請更改狀態標籤 (核准/退件) */
+        .approval-tag {
             font-size: 12px;
-            cursor: pointer;
-            margin-top: 10px;
-            transition: 0.3s;
+            padding: 2px 6px;
+            border-radius: 4px;
+            margin-left: 10px;
+            font-weight: bold;
         }
-
-        .btn-change:hover {
-            background: rgba(255, 138, 138, 0.1);
-        }
+        .tag-approved { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
+        .tag-rejected { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
         
         /* 警告文字合併版 */
         .lock-note { 
@@ -277,12 +271,19 @@
                         <button class="btn-lock" id="btn-lock-result" onclick="GameEngine.lockDate('result')">確認</button>
                     </div>
 
+                    <div class="date-row">
+                        <label>申請更改日期：</label>
+                        <input type="date" id="input-change-date">
+                        <button class="btn-lock" id="btn-lock-change" onclick="GameEngine.requestChange()">確認</button>
+                    </div>
+                    <div id="change-status-container" style="text-align: right; margin-top: -10px; margin-bottom: 10px; display: none;">
+                        <span id="change-status-label" class="approval-tag"></span>
+                    </div>
+
                     <div class="lock-note">
                         ⚠️ 日期一經鎖定無法修改,若需調整請洽人資承辦.<br>
                         ⚠️ 無理由延期予以扣分,請再三確認後再動作.
                     </div>
-
-                    <button class="btn-change" onclick="GameEngine.requestChange()">🛠️ 申請更改日期</button>
                 </div>
 
                 <div class="action-center">
@@ -295,7 +296,11 @@
         <details>
             <summary class="main-summary">【戰前整備】準備營</summary>
             <div class="details-body">
-                <span class="task-target">📣 任務目標 -確認物品與服裝規範,當日未符規定會影響最終積極度總分.</span>
+                <span class="task-target">
+                    📣 任務目標 <br>
+                    　　- 確認物品與服裝規範.<br>
+                    　　- 當日未符規定會影響最終積極度總分.
+                </span>
                 
                 <div style="background: rgba(251,191,36,0.1); padding: 15px; border-radius: 8px; margin-bottom: 15px; border: 1px solid #fbbf24;">
                     📅 報到時間：<span class="info-highlight" id="dyn-apt-time">等待公會發布...</span><br>
