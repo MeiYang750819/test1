@@ -78,6 +78,12 @@
             font-family: inherit;
         }
 
+        /* 🎯 讓日曆圖標顏色與日期文字同步 */
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            filter: invert(1) opacity(0.7); /* 調整圖標顏色至柔和灰白 */
+            cursor: pointer;
+        }
+
         /* 調整 Chrome/Safari 預設文字間距 (擬合 年 / 月 / 日 效果) */
         input[type="date"]::-webkit-datetime-edit {
             padding-left: 10%;
@@ -86,10 +92,10 @@
             letter-spacing: 2px;
         }
 
-        /* 確認按鈕 - 調暗底色，降低亮度 */
+        /* 確認按鈕 - 調暗底色，文字顏色改為與日期一致 */
         .btn-lock { 
-            background: #232a35; /* 調深後的底色 */
-            color: #efefef; 
+            background: #232a35; 
+            color: rgba(255, 255, 255, 0.7); /* 文字顏色與日期框同步 */
             border: 1px solid #4ade80; 
             padding: 8px 12px; 
             border-radius: 4px; 
@@ -99,8 +105,16 @@
             transition: 0.3s;
             white-space: nowrap;
         }
-        .btn-lock:hover { background: #4ade80; color: #000; }
-        .btn-lock:disabled { opacity: 0.3; cursor: not-allowed; border-color: #555; }
+        .btn-lock:hover { 
+            background: #4ade80; 
+            color: #000; 
+        }
+        .btn-lock:disabled { 
+            opacity: 0.3; 
+            cursor: not-allowed; 
+            border-color: #555;
+            color: #666;
+        }
         
         /* 警告文字合併版 */
         .lock-note { 
