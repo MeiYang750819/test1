@@ -88,7 +88,7 @@
     <nav class="nav-tabs" style="top: 180px;">
         <a href="index.html" class="tab-btn">📜 冒險指南</a>
         <a href="page2.html" class="tab-btn">🏹 鍛造秘笈</a>
-        <a href="page3.html" class="tab-btn active">⚔️ 勇者試煉</a>
+        <a href="javascript:location.reload()" class="tab-btn active">⚔️ 勇者試煉</a>
     </nav>
 
     <main class="tab-content active">
@@ -103,7 +103,7 @@
                 <label class="check-item"><input type="checkbox" id="chk-risk"> 若被退件「 👤 本人承擔」</label>
                 
                 <div class="action-center">
-                    <button class="btn-confirm" onclick="checkAndCompleteTrial1(event)">✓ 完成新手報到</button>
+                    <button class="btn-confirm" id="btn-trial-1" onclick="checkTrial1(event)">✓ 完成新手報到</button>
                 </div>
             </div>
         </details>
@@ -116,22 +116,47 @@
                 <label class="check-item"><input type="checkbox"> 台新國際商業銀行-實體存摺</label>
                 <label class="check-item"><input type="checkbox"> 中餐證照</label>
                 <label class="check-item"><input type="checkbox"> 西餐證照</label>
-                <label class="check-item"><input type="checkbox"> 其他：<input type="text" class="check-input-text"></label>
+                <label class="check-item"><input type="checkbox"> 其他證件（如居留證、護照等）</label>
                 
                 <div class="action-center">
-                    <button class="btn-confirm" onclick="GameEngine.completeTrial(event, 2)">✓ 完成裝備盤點</button>
+                    <button class="btn-confirm" id="btn-trial-2" onclick="GameEngine.completeTrial(event, 2)">✓ 完成裝備盤點</button>
                 </div>
             </div>
         </details>
 
         <details>
-            <summary class="main-summary">【裝備強化】準備期</summary>
+            <summary class="main-summary">【裝備強化】鑑定所</summary>
             <div class="details-body">
-                <span class="task-target">📣 任務目標 -請上傳您的五大必備文件，進入裝備鑑定所。</span>
-                <span style="font-size: 13px; color: #b7b7b7; display: block; margin-bottom: 12px;">(此區未來將連動後台審核機制)</span>
+                <span class="task-target">📣 任務目標 -請上傳五大文件,進入裝備鑑定所.</span>
                 
+                <label class="check-item"><input type="checkbox" class="chk-trial3"> 經認證醫療機構-勞工體格檢查報告</label>
+                <label class="check-item"><input type="checkbox" class="chk-trial3"> 經認證醫療機構-食品從業人員體檢報告</label>
+                <label class="check-item"><input type="checkbox" class="chk-trial3"> 兩吋照片一張</label>
+                <label class="check-item"><input type="checkbox"> 前份工作健保轉出證明 -新鮮人免附</label>
+                <label class="check-item"><input type="checkbox"> 前份工作離職證明 -新鮮人免附</label>
+
+                <div class="tracking-box">
+                    <span class="tracking-header">🕒 體檢進度追蹤</span>
+                    <div class="date-row">
+                        <label>預計體檢日期：</label>
+                        <input type="date" id="input-exam-date">
+                        <button class="btn-lock" id="btn-lock-exam" onclick="GameEngine.lockDate('exam')">📌 鎖定日期</button>
+                    </div>
+                    <div class="date-row">
+                        <label>報告預計產出：</label>
+                        <input type="date" id="input-result-date">
+                        <button class="btn-lock" id="btn-lock-result" onclick="GameEngine.lockDate('result')">📌 鎖定產出日</button>
+                    </div>
+                    <div class="lock-note">
+                        ⚠️ 日期一經鎖定無法修改.<br>
+                        ⚠️ 若需調整請洽人資承辦.<br>
+                        ⚠️ 無理由延期予以扣分.<br>
+                        ⚠️ 請再三確認後再動作.
+                    </div>
+                </div>
+
                 <div class="action-center">
-                    <button class="btn-confirm" onclick="GameEngine.completeTrial(event, 3)">✓ 完成裝備強化</button>
+                    <button class="btn-confirm" id="btn-trial-3" onclick="checkTrial3(event)">✓ 完成報到文件提交</button>
                 </div>
             </div>
         </details>
@@ -142,7 +167,7 @@
                 <span class="task-target">📣 任務目標 -再次確認實體報到時間與地點，準備出征！</span>
                 
                 <div class="action-center">
-                    <button class="btn-confirm" onclick="GameEngine.completeTrial(event, 4)">✓ 完成戰前準備</button>
+                    <button class="btn-confirm" id="btn-trial-4" onclick="GameEngine.completeTrial(event, 4)">✓ 完成戰前準備</button>
                 </div>
             </div>
         </details>
@@ -153,7 +178,7 @@
                 <span class="task-target">📣 任務目標 -報到當日，線上簽署正式僱傭契約。</span>
                 
                 <div class="action-center">
-                    <button class="btn-confirm" onclick="GameEngine.completeTrial(event, 5)">✓ 完成最終考驗</button>
+                    <button class="btn-confirm" id="btn-trial-5" onclick="GameEngine.completeTrial(event, 5)">✓ 完成最終考驗</button>
                 </div>
             </div>
         </details>
@@ -164,7 +189,7 @@
                 <span class="task-target">📣 任務目標 -主管與人資最終決斷放行，踏入榮耀殿堂！</span>
                 
                 <div class="action-center">
-                    <button class="btn-confirm" style="color:#fbbf24; border-color:#fbbf24;" onclick="GameEngine.completeTrial(event, 6)">👑 迎接最終榮耀</button>
+                    <button class="btn-confirm" id="btn-trial-6" style="color:#fbbf24; border-color:#fbbf24;" onclick="GameEngine.completeTrial(event, 6)">👑 迎接最終榮耀</button>
                 </div>
             </div>
         </details>
@@ -186,16 +211,22 @@
         }
         window.addEventListener('load', () => applyData(fetchedData));
 
-        function checkAndCompleteTrial1(event) {
+        function checkTrial1(e) {
             const chk1 = document.getElementById('chk-guide').checked;
             const chk2 = document.getElementById('chk-forge').checked;
             const chk3 = document.getElementById('chk-risk').checked;
-
             if (!chk1 || !chk2 || !chk3) {
-                alert("⚠️ 勇者請注意：必須勾選所有確認項目，才能推進！");
-                return;
+                alert("⚠️ 勇者請注意：必須勾選所有確認項目，才能推進！"); return;
             }
-            GameEngine.completeTrial(event, 1);
+            GameEngine.completeTrial(e, 1);
+        }
+
+        function checkTrial3(e) {
+            const chks = document.querySelectorAll('.chk-trial3');
+            let all = true;
+            chks.forEach(c => { if(!c.checked) all = false; });
+            if (!all) { alert("⚠️ 勇者請注意：前三項必備文件必須勾選完成，才能推進！"); return; }
+            GameEngine.completeTrial(e, 3);
         }
     </script>
 </body>
