@@ -55,9 +55,7 @@ const GameEngine = {
             localStorage.removeItem('hero_progress');
         }
         setTimeout(() => { this.updateUI(true); }, 50);
-        
-        // 啟動💀報警計時器 (每小時檢查一次)
-        setInterval(() => this.checkLateWarning(), 3600000);
+        setInterval(() => this.checkLateWarning(), 600000); // 10分鐘檢查一次
     },
 
     save() { localStorage.setItem('hero_progress', JSON.stringify(this.state)); },
@@ -67,16 +65,15 @@ const GameEngine = {
         location.reload();
     },
 
-    // 📌 獨立日期鎖定邏輯
+    // 📌 日期鎖定
     lockDate(type) {
+        const id = type === 'exam' ? 'input-exam-date' : 'input-result-date';
+        const val = document.getElementById(id).value;
+        if (!val) { alert("請先選擇日期！"); return; }
         if (type === 'exam') {
-            const val = document.getElementById('input-exam-date').value;
-            if (!val) { alert("請先選擇日期！"); return; }
             this.state.examDate = val;
             this.state.examDateLocked = true;
         } else {
-            const val = document.getElementById('input-result-date').value;
-            if (!val) { alert("請先選擇日期！"); return; }
             this.state.resultDate = val;
             this.state.resultDateLocked = true;
         }
@@ -85,7 +82,7 @@ const GameEngine = {
         alert("📌 日期已鎖定，非經人資許可不得修改！");
     },
 
-    // 💀 檢查體檢是否延宕
+    // 💀 報警
     checkLateWarning() {
         if (this.state.examDate && this.state.currentTrial < 3) {
             const today = new Date().toISOString().split('T')[0];
@@ -98,23 +95,12 @@ const GameEngine = {
         return false;
     },
 
-    unlock(event, id, label, scoreGain, action = null) {
-        if (this.state.achievements.includes(id)) { return; }
-        this.state.achievements.push(id);
-        this.state.score += scoreGain;
-        this.save();
-        this.updateUI(true);
-        this.showToast(`✨ 觸發隱藏要素，積分+${scoreGain}`);
-    },
-
     completeTrial(event, trialNum) {
         if (this.state.currentTrial >= trialNum) {
-            alert("⚠️ 此階段任務已完成，請繼續前進！");
-            return;
+            alert("⚠️ 此階段任務已完成，請繼續前進！"); return;
         }
         if (trialNum > 1 && this.state.currentTrial < trialNum - 1) {
-            alert("⚠️ 勿著急，請先完成前一個階段任務！");
-            return;
+            alert("⚠️ 勿著急，請先完成前一個階段任務！"); return;
         }
 
         const tData = this.trialsData[trialNum];
@@ -122,14 +108,16 @@ const GameEngine = {
         this.state.location = tData.loc;
         this.state.score += tData.scoreGain;
         
+        // 防跳級升級防具
         const currentArmor = this.state.items.find(i => this.armorPath.includes(i));
         if (currentArmor) {
-            const currentIndex = this.armorPath.indexOf(currentArmor);
-            if (currentIndex < this.armorPath.length - 1) {
-                this.state.items = this.state.items.map(i => i === currentArmor ? this.armorPath[currentIndex + 1] : i);
+            const idx = this.armorPath.indexOf(currentArmor);
+            if (idx < this.armorPath.length - 1) {
+                this.state.items = this.state.items.map(i => i === currentArmor ? this.armorPath[idx + 1] : i);
             }
         }
 
+        // 武器升級
         if (trialNum >= 3 && this.state.weaponType) {
             const nextW = this.weaponPaths[this.state.weaponType];
             if (nextW) {
@@ -150,34 +138,27 @@ const GameEngine = {
 
     updateUI(isInit = false) {
         const rank = this.ranks.find(r => this.state.score >= r.min) || this.ranks[this.ranks.length - 1];
-        
-        document.getElementById('rank-text').innerHTML = `<span style="color:#fbbf24;">戰力：</span><span id="dyn-rank">${rank.title}</span>　｜　<span style="color:#fbbf24;">關卡：</span><span id="dyn-loc">${this.state.location}</span>`;
-        document.getElementById('status-tag').innerHTML = `<span style="color:#8ab4f8;">道具：</span><span id="dyn-items">${this.state.items.join(' ')}</span>　｜　<span style="color:#8ab4f8;">狀態：</span><span id="dyn-status">${this.state.status}</span>`;
-        document.getElementById('score-text').innerText = this.state.score + "分";
-        document.getElementById('score-fill').style.width = Math.min(this.state.score, 100) + "%";
+        const rEl = document.getElementById('rank-text');
+        const sEl = document.getElementById('status-tag');
+        const scEl = document.getElementById('score-text');
+        const scF = document.getElementById('score-fill');
+        const pV = document.getElementById('prog-val');
+        const pF = document.getElementById('prog-fill');
+
+        if (rEl) rEl.innerHTML = `<span style="color:#fbbf24;">戰力：</span><span id="dyn-rank">${rank.title}</span>　｜　<span style="color:#fbbf24;">關卡：</span><span id="dyn-loc">${this.state.location}</span>`;
+        if (sEl) sEl.innerHTML = `<span style="color:#8ab4f8;">道具：</span><span id="dyn-items">${this.state.items.join(' ')}</span>　｜　<span style="color:#8ab4f8;">狀態：</span><span id="dyn-status">${this.state.status}</span>`;
+        if (scEl) scEl.innerText = this.state.score + "分";
+        if (scF) scF.style.width = Math.min(this.state.score, 100) + "%";
 
         const hiddenBonus = Math.min(10, this.state.achievements.length * 5);
         const baseProg = this.state.currentTrial > 0 ? this.trialsData[this.state.currentTrial].baseProg : 0;
         const currentProg = Math.min(100, baseProg + hiddenBonus);
-        document.getElementById('prog-val').innerText = currentProg + "%";
-        document.getElementById('prog-fill').style.width = currentProg + "%";
+        if (pV) pV.innerText = currentProg + "%";
+        if (pF) pF.style.width = currentProg + "%";
 
-        // 更新按鈕狀態
+        // 更新按鈕狀態與日期元件
         this.updateButtonStyles();
-        
-        // 更新日期控制項
-        if (document.getElementById('input-exam-date')) {
-            const d1 = document.getElementById('input-exam-date');
-            const b1 = document.getElementById('btn-lock-exam');
-            d1.value = this.state.examDate || "";
-            if (this.state.examDateLocked) { d1.disabled = true; b1.disabled = true; b1.innerText = "🔒 已鎖定"; }
-            
-            const d2 = document.getElementById('input-result-date');
-            const b2 = document.getElementById('btn-lock-result');
-            d2.value = this.state.resultDate || "";
-            if (this.state.resultDateLocked) { d2.disabled = true; b2.disabled = true; b2.innerText = "🔒 已鎖定"; }
-        }
-
+        this.updateDateControls();
         this.checkLateWarning();
     },
 
@@ -189,31 +170,26 @@ const GameEngine = {
             if (this.state.currentTrial >= n) {
                 btn.disabled = true;
                 btn.style.opacity = "0.6";
-                btn.style.borderColor = "#999";
-                btn.style.color = "#ccc";
-                if (n === 3) {
-                    btn.innerText = "📝 已提交裝備";
-                } else if (n === 6) {
-                    btn.innerText = "👑 已完成榮耀";
-                } else {
-                    btn.innerText = "✓ 已完成試煉";
-                }
+                if (n === 3) btn.innerText = "📝 已提交裝備";
+                else if (n === 6) btn.innerText = "👑 已完成榮耀";
+                else btn.innerText = "✓ 已完成試煉";
             }
         });
     },
 
-    triggerFlashAndUpdate(el, txt) {
-        el.classList.add('rank-flash');
-        setTimeout(() => { el.innerText = txt; el.classList.remove('rank-flash'); }, 1500);
-    },
-
-    showToast(msg) {
-        const toast = document.createElement('div');
-        toast.className = 'game-toast';
-        toast.style.cssText = "position:fixed; bottom:80px; right:20px; background:rgba(0,0,0,0.9); color:#10b981; padding:12px 20px; border-radius:8px; border:1px solid #10b981; z-index:10000; font-weight:bold;";
-        toast.innerText = msg;
-        document.body.appendChild(toast);
-        setTimeout(() => toast.remove(), 4000);
+    updateDateControls() {
+        const d1 = document.getElementById('input-exam-date');
+        const b1 = document.getElementById('btn-lock-exam');
+        if (d1) {
+            d1.value = this.state.examDate || "";
+            if (this.state.examDateLocked) { d1.disabled = true; b1.disabled = true; b1.innerText = "🔒 已鎖定"; }
+        }
+        const d2 = document.getElementById('input-result-date');
+        const b2 = document.getElementById('btn-lock-result');
+        if (d2) {
+            d2.value = this.state.resultDate || "";
+            if (this.state.resultDateLocked) { d2.disabled = true; b2.disabled = true; b2.innerText = "🔒 已鎖定"; }
+        }
     }
 };
 window.addEventListener('load', () => GameEngine.init());
