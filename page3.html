@@ -11,21 +11,24 @@
         /* 🎯 關鍵修復點：針對第三頁覆寫 normal，防止原始碼空白破壞版面，同時保留與第一頁相同的完美寬鬆間距 */
         .details-body {
             white-space: normal !important; 
+            color: #e0e0e0; /* 避開純白，改用柔和淺灰 */
         }
 
         .task-target {
-            color: #efefef;
+            color: #ffffff; /* 標題文字亮一點 */
+            filter: brightness(1.1);
             font-weight: bold;
             display: block;
-            margin-bottom: 12px; /* 寬鬆呼吸感 */
+            margin-bottom: 12px; 
         }
 
         .check-item {
             display: flex;
             align-items: center;
-            margin-bottom: 10px; /* 寬鬆呼吸感 */
+            margin-bottom: 10px; 
             cursor: pointer;
             font-size: 14px;
+            color: #d1d1d1; /* 內文亮度微調 */
         }
 
         .check-item input[type="checkbox"] {
@@ -46,7 +49,7 @@
             font-family: inherit;
         }
 
-        /* 🕒 體檢進度追蹤區塊 - 依照圖片精確調整 */
+        /* 🕒 體檢進度追蹤區塊 */
         .tracking-box { 
             background: rgba(0,0,0,0.2); 
             padding: 20px; 
@@ -71,44 +74,32 @@
             gap: 10px; 
         }
         
-        /* 日期輸入框客製化 - 年 / 月 / 日 間距與顏色 */
         .date-row input[type="date"] { 
             background: #1a1a1a; 
             border: 1px solid #444; 
-            color: rgba(255, 255, 255, 0.7); /* 非純白，較柔和 */
+            color: rgba(255, 255, 255, 0.7); 
             padding: 8px; 
             border-radius: 4px; 
-            flex: 2; /* 手機版佔比加長 */
+            flex: 2; 
             outline: none;
-            text-align: center; /* 文字置中 */
+            text-align: center; 
             font-family: inherit;
         }
 
-        /* 🎯 讓日曆圖標顏色與日期文字同步 */
         input[type="date"]::-webkit-calendar-picker-indicator {
-            filter: invert(1) opacity(0.7); /* 調整圖標顏色至柔和灰白 */
+            filter: invert(1) opacity(0.7); 
             cursor: pointer;
         }
 
-        /* 調整 Chrome/Safari 預設文字間距 (擬合 年 / 月 / 日 效果) */
-        input[type="date"]::-webkit-datetime-edit {
-            padding-left: 10%;
-        }
-
-        input[type="date"]::-webkit-datetime-edit-fields-wrapper {
-            letter-spacing: 2px;
-        }
-
-        /* 確認按鈕 - 調暗底色，文字顏色改為與日期一致 */
         .btn-lock { 
             background: #232a35; 
-            color: rgba(255, 255, 255, 0.7); /* 文字顏色與日期框同步 */
+            color: rgba(255, 255, 255, 0.7); 
             border: 1px solid #4ade80; 
             padding: 8px 12px; 
             border-radius: 4px; 
             font-size: 14px; 
             cursor: pointer;
-            flex: 1; /* 手機版佔比較短 */
+            flex: 1; 
             transition: 0.3s;
             white-space: nowrap;
         }
@@ -124,19 +115,7 @@
             border-color: #555;
             color: #666;
         }
-
-        /* 申請更改狀態標籤 (核准/退件) */
-        .approval-tag {
-            font-size: 12px;
-            padding: 2px 6px;
-            border-radius: 4px;
-            margin-left: 10px;
-            font-weight: bold;
-        }
-        .tag-approved { background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid #10b981; }
-        .tag-rejected { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
         
-        /* 警告文字合併版 */
         .lock-note { 
             font-size: 13px; 
             color: #ff8a8a; 
@@ -145,7 +124,6 @@
             margin-top: 10px;
         }
 
-        /* 第四關數據顯示樣式 */
         .info-highlight {
             color: #fbbf24;
             font-weight: bold;
@@ -153,7 +131,7 @@
 
         .action-center {
             text-align: center;
-            margin-top: 20px; /* 按鈕與上方文字拉開舒適距離 */
+            margin-top: 20px; 
         }
 
         .btn-confirm {
@@ -175,7 +153,6 @@
             color: #000;
         }
 
-        /* 手機版 RWD 比例微調 */
         @media (max-width: 480px) {
             .date-row input[type="date"] { flex: 2.5; }
             .btn-lock { flex: 1; font-size: 13px; }
@@ -215,7 +192,11 @@
         <details>
             <summary class="main-summary">【新手報到】啟程點</summary>
             <div class="details-body">
-                <span class="task-target">📣 任務目標 -確認已詳閱入職規範.</span>
+                <span class="task-target">
+                    📣 任務目標 <br>
+                    　　- 確認已詳閱入職規範.<br>
+                    　　- 確保完全理解冒險指南內容.
+                </span>
                 
                 <label class="check-item"><input type="checkbox" id="chk-guide"> 我已閱讀「📜 冒險指南」</label>
                 <label class="check-item"><input type="checkbox" id="chk-forge"> 我已閱讀「🏹 鍛造秘笈」</label>
@@ -231,7 +212,11 @@
         <details>
             <summary class="main-summary">【裝備盤點】行囊區</summary>
             <div class="details-body">
-                <span class="task-target">📣 任務目標 -是否有以下四大文件,若無按確認即可.</span>
+                <span class="task-target">
+                    📣 任務目標 <br>
+                    　　- 確認現有證照與銀行帳戶.<br>
+                    　　- 若無下列文件亦可直接確認.
+                </span>
                 
                 <label class="check-item"><input type="checkbox"> 台新國際商業銀行-實體存摺</label>
                 <label class="check-item"><input type="checkbox"> 中餐證照</label>
@@ -248,7 +233,11 @@
         <details>
             <summary class="main-summary">【裝備強化】鑑定所</summary>
             <div class="details-body">
-                <span class="task-target">📣 任務目標 -請上傳五大文件,進入裝備鑑定所.</span>
+                <span class="task-target">
+                    📣 任務目標 <br>
+                    　　- 上傳入職五大必備文件.<br>
+                    　　- 確實填寫並追蹤體檢進度.
+                </span>
                 
                 <label class="check-item"><input type="checkbox" class="chk-trial3"> 經認證醫療機構-勞工體格檢查報告</label>
                 <label class="check-item"><input type="checkbox" class="chk-trial3"> 經認證醫療機構-食品從業人員體檢報告</label>
@@ -275,9 +264,6 @@
                         <label>申請更改日期：</label>
                         <input type="date" id="input-change-date">
                         <button class="btn-lock" id="btn-lock-change" onclick="GameEngine.requestChange()">確認</button>
-                    </div>
-                    <div id="change-status-container" style="text-align: right; margin-top: -10px; margin-bottom: 10px; display: none;">
-                        <span id="change-status-label" class="approval-tag"></span>
                     </div>
 
                     <div class="lock-note">
@@ -321,7 +307,11 @@
         <details>
             <summary class="main-summary">【最終考驗】報到日</summary>
             <div class="details-body">
-                <span class="task-target">📣 任務目標 -報到當日，線上簽署正式僱傭契約。</span>
+                <span class="task-target">
+                    📣 任務目標 <br>
+                    　　- 報到當日現場操作.<br>
+                    　　- 線上簽署正式僱傭契約.
+                </span>
                 
                 <div class="action-center">
                     <button class="btn-confirm" id="btn-trial-5" onclick="GameEngine.completeTrial(event, 5)">✓ 完成最終考驗</button>
@@ -333,7 +323,11 @@
         <details>
             <summary class="main-summary">【完成試煉】決斷區</summary>
             <div class="details-body">
-                <span class="task-target">📣 任務目標 -主管與人資最終決斷放行，踏入榮耀殿堂！</span>
+                <span class="task-target">
+                    📣 任務目標 <br>
+                    　　- 待公會完成最後審核.<br>
+                    　　- 正式踏入榮耀殿堂.
+                </span>
                 
                 <div class="action-center">
                     <button class="btn-confirm" id="btn-trial-6" style="color:#fbbf24; border-color:#fbbf24;" onclick="GameEngine.completeTrial(event, 6)">👑 迎接最終榮耀</button>
@@ -345,7 +339,7 @@
 
     <footer class="footer">
         <img src="assets/MYs_logo_去背.png" alt="MYs Logo" class="footer-logo">
-        © Copyright 2026 MYs System-b1.0.0-03-01-2026-115
+        © Copyright 2026 MYs System-b1.0.0-03-02-2026-115
     </footer>
 
     <script>
